@@ -1,6 +1,23 @@
 # 🃏 Card Swapping - Interactive Anime Character Cards
 
+<div align="center">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
+  <img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" />
+  <img src="https://img.shields.io/badge/Responsive-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white" />
+</div>
+
+<div align="center">
+  <img src="https://img.shields.io/github/stars/Exploitdaworld/card-swapping?style=social" />
+  <img src="https://img.shields.io/github/forks/Exploitdaworld/card-swapping?style=social" />
+  <img src="https://img.shields.io/github/watchers/Exploitdaworld/card-swapping?style=social" />
+</div>
+
 An interactive card swapping application featuring popular anime characters with smooth drag/swipe animations. Built using only HTML, CSS, and vanilla JavaScript with `<div>` elements.
+
+## 🚀 [Live Demo](https://exploitdaworld.github.io/card-swapping/)
+
+**Try it now:** [https://exploitdaworld.github.io/card-swapping/](https://exploitdaworld.github.io/card-swapping/)
 
 ## ✨ Features
 
@@ -22,7 +39,11 @@ An interactive card swapping application featuring popular anime characters with
 
 ## 🚀 Demo
 
-Simply open `card-swipe v2.html` in your browser to start swiping cards!
+### 🌐 Online Demo
+**[Click here to try the live demo!](https://exploitdaworld.github.io/card-swapping/)**
+
+### 🔧 Local Setup
+Simply open `index.html` in your browser to start swiping cards!
 
 ## 🎮 How to Use
 
@@ -35,7 +56,7 @@ Simply open `card-swipe v2.html` in your browser to start swiping cards!
 
 ```
 card-swapping/
-├── card-swipe v2.html     # Main application file
+├── index.html             # Main application file
 ├── README.md              # Project documentation
 └── assets/               # Character images
     ├── tanjiro in action.gif
@@ -88,9 +109,11 @@ You can easily customize the application by:
    - Modify `MAX_ROT` for rotation intensity
    - Change animation durations and easing functions
 
-## 🌟 Live Demo
+## 🌟 Links
 
-View the project live at: [https://github.com/Exploitdaworld/card-swapping](https://github.com/Exploitdaworld/card-swapping)
+- 🚀 **Live Demo:** [https://exploitdaworld.github.io/card-swapping/](https://exploitdaworld.github.io/card-swapping/)
+- 📂 **Repository:** [https://github.com/Exploitdaworld/card-swapping](https://github.com/Exploitdaworld/card-swapping)
+- 👨‍💻 **Developer:** [Exploitdaworld](https://github.com/Exploitdaworld)
 
 ## 📱 Browser Support
 
@@ -114,4 +137,12 @@ This project is open source and available under the MIT License.
 
 ---
 
-**Built with ❤️ for anime fans and web developers!**
+<div align="center">
+  <img src="https://img.shields.io/badge/Made%20with-❤️-red?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/For-Anime%20Fans-FF69B4?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/By-Web%20Developers-00D4AA?style=for-the-badge" />
+</div>
+
+<div align="center">
+  <strong>Built with ❤️ for anime fans and web developers!</strong>
+</div>
