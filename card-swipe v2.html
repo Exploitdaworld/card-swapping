@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Card Stack – drag/swipe</title>
+  <style>
+    :root { --card-w: 320px; --card-h: 420px; --gap: 14px; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      display: grid;
+      place-items: center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(120deg, #0f0f0f 0%, #0c0b0b 60%, #161615 100%);
+      animation : bgmove 8s linear infinite alternate;
+      color: #e5e7eb;
+      overflow: hidden;
+    }
+    @keyframes bgmove {
+      from { background-position: left; }
+      to { background-position: right; }
+    }
+    /* App shell */
+    .app {
+      position: relative;
+      width: min(92vw, 480px);
+      height: min(92vh, 760px);
+      display: grid;
+      place-items: center;
+    }
+
+    /* Stack area */
+    .stack {
+      position: relative;
+      width: var(--card-w);
+      height: var(--card-h);
+      touch-action: pan-y; /* prevent horizontal scroll, allow vertical */
+      user-select: none;
+      perspective: 1000px;
+      cursor: grab;
+    }
+    .stack:active { cursor: grabbing; }
+
+    /* Card base — ONLY divs used */
+    .card {
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      background: #111827;
+      background-image: radial-gradient(80% 120% at 20% 0%, rgba(255,255,255,.06), transparent 60%),
+                        radial-gradient(120% 120% at 120% 0%, rgba(255,255,255,.04), transparent 60%),
+                        linear-gradient(135deg, hsl(var(--h,210) 90% 55% / .16), transparent 40%);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding: 20px;
+      transform-origin: 50% 100%;
+      transform: translate3d(0, calc(var(--pos, 0) * 1px), 0)
+                 scale(calc(1 - var(--scale, 0)))
+                 rotate(calc(var(--rot, 0) * 1deg));
+      transition: transform .28s cubic-bezier(.25,.46,.45,.94);
+      will-change: transform;
+      animation: rgbGlow 6s linear infinite;
+    }
+     @keyframes rgbGlow {
+      0% { box-shadow: 0 0 20px 4px rgba(255, 0, 0, 0.6 );}
+      33% { box-shadow: 0 0 20px 4px rgba(0, 255, 0, 0.6 );}
+      66% { box-shadow: 0 0 20px 4px rgba(0, 0, 255, 0.6 );}
+      100% { box-shadow: 0 0 20px 4px rgba(255, 0, 0, 0.6 );}
+    }
+    /* Subtle stacked look for the resting cards */
+    .card[data-layer] { pointer-events: none; }
+
+    /* Content inside card (still divs) */
+    .title { font-size: 24px; font-weight: 700; letter-spacing: .3px; }
+    .subtitle { opacity: .8; margin-top: 6px; }
+    .footer { display: flex; justify-content: space-between; align-items: center; opacity: .85; font-size: 14px; }
+
+    /* Swipe labels */
+    .badge {
+      position: absolute;
+      top: 14px;
+      padding: 10px 14px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      border-radius: 999px;
+      border: 2px solid currentColor;
+      transform: scale(var(--show, 0));
+      transform-origin: center;
+      transition: transform .12s ease;
+      pointer-events: none;
+    }
+    .badge.like { left: 14px; color: #22c55e; background: color-mix(in oklab, #22c55e 16%, transparent); }
+    .badge.nope { right: 14px; color: #ef4444; background: color-mix(in oklab, #ef4444 16%, transparent); }
+
+    /* Helper hint */
+    .hint {
+      position: absolute;
+      bottom: -46px;
+      left: 50%;
+      translate: -50% 0;
+      font-size: 13px;
+      opacity: .7;
+    }
+
+    /* Responsive card size */
+    @media (max-width: 380px) {
+      :root { --card-w: 88vw; --card-h: 72vh; }
+    }
+  </style>
+</head>
+<body>
+  <p style="position: absolute; top: 10px; left: 10px; margin: 0; opacity: 0.7; z-index: 1000;">Option 2</p>
+  <div class="app">
+    <div class="stack" id="stack">
+      <!-- Top card should be the LAST one in the DOM for easier z-index/transform control -->
+      <div class="card" style="--h: 280" data-layer>
+        <div>
+      <div class="image" style="background-image: url('tanjiro\ in\ action.gif'); height:200px; width: 270px; background-size: cover; border-radius: 15px; margin-bottom: 10px;"></div>
+          <div class="title">Tanjiro in action</div>
+          <div class="subtitle">"Demon Slayer"</div>
+        </div>
+        <div class="footer">
+          <div>Card 1</div>
+          <div>next</div>
+        </div>
+        <div class="badge like">LIKE</div>
+        <div class="badge nope">NOPE</div>
+      </div>
+      <div class="card" style="--h: 330" data-layer>
+        <div>
+       <div class="image" style="background-image: url('jinwoo.gif'); height:200px; width: 270px; background-size: cover; border-radius: 15px; margin-bottom: 10px;"></div>
+          <div class="title">jinwoo</div>
+          <div class="subtitle">"Solo leveling"</div>
+        </div>
+        <div class="footer">
+          <div>Card 2</div>
+          <div>next</div>
+        </div>
+        <div class="badge like">LIKE</div>
+        <div class="badge nope">NOPE</div>
+      </div>
+      <div class="card" style="--h: 200">
+        <div>
+         <div class="image" style="background-image: url('power.gif'); height:200px; width: 270px; background-size: cover; border-radius: 15px; margin-bottom: 10px;"></div>
+          <div class="title">Power</div>
+          <div class="subtitle">"Chainsaw Man"</div>
+        </div>
+        <div class="footer">
+          <div>Card 3</div>
+          <div>next</div>
+        </div>
+        <div class="badge like">LIKE</div>
+        <div class="badge nope">NOPE</div>
+        <div class="hint">Tip: fling with a quick swipe</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sr-only" aria-hidden="true"></div>
+
+  <script>
+    (function () {
+      const stack = document.getElementById('stack');
+      const SWIPE_THRESHOLD = Math.min(140, window.innerWidth * 0.28);
+      const MAX_ROT = 16; // deg at full swipe
+
+      // Layout resting cards with offsets/scales
+      function layout() {
+        const cards = [...stack.querySelectorAll('.card')];
+        cards.forEach((card, i) => {
+          const layer = cards.length - 1 - i; // 0 = top, 1 = under, ...
+          const pos = Math.min(layer, 2) * 12; // vertical offset per layer
+          const scale = Math.min(layer, 2) * 0.04; // scale per layer
+          card.style.setProperty('--pos', pos);
+          card.style.setProperty('--scale', scale);
+          card.style.zIndex = String(100 + i);
+          if (layer > 0) card.setAttribute('data-layer', ''); else card.removeAttribute('data-layer');
+        });
+      }
+
+      // Pointer-driven drag on the top card only (last child)
+      function enableTopCard() {
+        const card = stack.lastElementChild;
+        if (!card || !card.classList.contains('card')) return;
+
+        let startX = 0, startY = 0, dx = 0, dy = 0, dragging = false;
+        let lastT = 0, lastX = 0, vx = 0; // simple velocity approx for fling
+
+        const like = card.querySelector('.badge.like');
+        const nope = card.querySelector('.badge.nope');
+
+        function onDown(e) {
+          dragging = true;
+          card.style.transition = 'none';
+          const p = pointer(e);
+          startX = p.x; startY = p.y; dx = 0; dy = 0;
+          lastT = performance.now(); lastX = p.x; vx = 0;
+          card.setPointerCapture?.(e.pointerId);
+        }
+
+        function onMove(e) {
+          if (!dragging) return;
+          const p = pointer(e);
+          dx = p.x - startX; dy = p.y - startY;
+
+          const rot = clamp((dx / SWIPE_THRESHOLD) * MAX_ROT, -MAX_ROT, MAX_ROT);
+          card.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${rot}deg)`;
+
+          // Show badges based on direction + intensity
+          const strength = Math.min(Math.abs(dx) / SWIPE_THRESHOLD, 1);
+          like.style.setProperty('--show', dx > 0 ? strength : 0);
+          nope.style.setProperty('--show', dx < 0 ? strength : 0);
+
+          // velocity estimate
+          const now = performance.now();
+          const dt = now - lastT;
+          if (dt > 0) { vx = (p.x - lastX) / dt; lastT = now; lastX = p.x; }
+        }
+
+        function onUp(e) {
+          if (!dragging) return;
+          dragging = false;
+
+          const absX = Math.abs(dx);
+          const fling = Math.abs(vx) > 0.8; // px/ms
+          const shouldSwipe = absX > SWIPE_THRESHOLD || fling;
+
+          like.style.setProperty('--show', 0);
+          nope.style.setProperty('--show', 0);
+
+          if (shouldSwipe) {
+            const dir = dx >= 0 ? 1 : -1;
+            const toX = dir * (window.innerWidth + 200);
+            const rot = dir * MAX_ROT * 1.25;
+            card.style.transition = 'transform .28s ease-out';
+            card.style.transform = `translate3d(${toX}px, ${dy}px, 0) rotate(${rot}deg)`;
+            card.addEventListener('transitionend', recycle, { once: true });
+          } else {
+            // Snap back
+            card.style.transition = 'transform .28s ease';
+            card.style.transform = '';
+          }
+        }
+
+        function recycle() {
+          // Move swiped card to the bottom and reset
+          card.style.transition = 'none';
+          card.style.transform = '';
+          stack.insertBefore(card, stack.firstElementChild);
+          layout();
+          // Rebind to the new top card
+          binders(false);
+          enableTopCard();
+        }
+
+        function binders(on = true) {
+          const m = on ? 'addEventListener' : 'removeEventListener';
+          card[m]('pointerdown', onDown);
+          window[m]('pointermove', onMove);
+          window[m]('pointerup', onUp);
+          window[m]('pointercancel', onUp);
+        }
+
+        binders(true);
+      }
+
+      function pointer(e) {
+        return { x: (e.touches ? e.touches[0].clientX : e.clientX), y: (e.touches ? e.touches[0].clientY : e.clientY) };
+      }
+
+      function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+      // Kick things off
+      layout();
+      enableTopCard();
+
+      // Resize recalculations
+      window.addEventListener('resize', () => layout());
+    })();
+  </script>
+</body>
+</html>
